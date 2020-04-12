@@ -1,4 +1,4 @@
-package main
+package linklist
 
 import "testing"
 
@@ -14,6 +14,10 @@ func TestAddTwoNumbers(t *testing.T) {
 	l3 := addTwoNumbers(&l1,&l2)
 	t.Error(l3.Val)
 }
+//2. 两数相加
+//本来就是逆序，从头个十百千万，过十进一，添加一个变量记录那个一，
+//有点麻烦的是尾节点总是要创建一个，会存在空的现象，所以每次先创建一个节点存数据。
+//最后返回节点的next节点。执行时间4ms,内存消耗5MB
 func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	if l1 == nil && l2 == nil {
 		return nil

@@ -1,4 +1,4 @@
-package main
+package number
 
 import (
 	"testing"
@@ -10,6 +10,7 @@ func TestTwoSum(t *testing.T) {
 	arr := twoSum(num, target)
 	t.Error(arr)
 }
+
 
 func twoSum(nums []int, target int) []int {
 	result := []int{}
