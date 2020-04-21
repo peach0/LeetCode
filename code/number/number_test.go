@@ -70,3 +70,25 @@ func findK(nums1 []int, left1 int, nums2 []int, left2 int, k int) float64 {
 	}
 	return findK(nums1, left1, nums2, left2 + k / 2, k - k / 2)
 }
+
+func TestReverse(t *testing.T) {
+	println(math.MinInt32)
+	println(math.MaxInt32)
+	println(reverse(15342364690))
+
+}
+//7. 整数反转
+func reverse(x int) int {
+	y := 0
+	if x == 0 {
+		return  x
+	}
+	for x <= -1 || x >= 1  {
+		y = y * 10 + x % 10
+		x /= 10
+	}
+	if y > math.MaxInt32 || y < math.MinInt32 {
+		return 0
+	}
+	return y
+}
