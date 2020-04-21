@@ -31,41 +31,42 @@ func twoSum(nums []int, target int) []int {
 }
 
 /*4. 寻找两个有序数组的中位数
-* 找出中位数实际则是找出第k个数，分别在两个数组里面找出第k/2个数A和B，删除A和B较小的那个数组的前k/2的数。
-理由是较小的那个数的位置最大也就是k-1,因为后面最少还有一个比他大的数，
+二分法求解，时间复杂度为log（m+n）
+1、找出中位数实际则是找出第k个数，分别在两个数组里面找出第k/2个数A和B
+2、删除A和B较小的那个数组的前k/2的数。理由是较小的那个数的位置最大也就是k-1,因为后面最少还有一个比他大的数
+3、使用case来聚合多个条件运算，耗时从36ms降到12ms，代码也简洁不少
 */
 func TestFindMedian(t *testing.T) {
-	nums1 := []int{1}
-	nums2 := []int{2,3,4,5,6}
+	nums1 := []int{1,2}
+	nums2 := []int{3,4}
 	t.Log(findMedianSortedArrays(nums1, nums2))
 }
 func findMedianSortedArrays(nums1 []int, nums2 []int) float64 {
 	sum := len(nums1) + len(nums2)
 	if sum % 2 == 0 {
-		return (findK(nums1, 0, nums2,0, sum) + findK(nums1, 0, nums2, 0, sum / 2 + 1)) / 2
+		return (findK(nums1, 0, nums2,0, sum / 2) + findK(nums1, 0, nums2, 0, sum / 2 + 1)) / 2
 	}
 	return findK(nums1, 0, nums2, 0, sum/2 + 1)
 }
 func findK(nums1 []int, left1 int, nums2 []int, left2 int, k int) float64 {
-	if left1 >= len(nums1) {
+	mid1, mid2 := 0, 0
+	switch  {
+	case left1 >= len(nums1) :
 		return float64(nums2[left2+k-1])
-	}
-	if left2 >= len(nums2) {
+	case left2 >= len(nums2):
 		return float64(nums1[left1+k-1])
-	}
-	if k == 1 {
+	case k == 1:
 		return float64(selfutil.Min(nums1[left1], nums2[left2]))
-	}
-	mid1, mid2 := nums1[left1 + k / 2 -1], nums2[left2 + k / 2 -1]
-	if left1+k/2-1 > len(nums1) {
+	case left1 + k / 2 -1 >= len(nums1):
 		mid1 = math.MaxInt64
-	}
-
-	if left1+k/2-1 > len(nums1) {
-		mid1 = math.MaxInt64
+	case left2 + k / 2 - 1 >= len(nums2):
+		mid2 = math.MaxInt64
+	default:
+		mid1 = nums1[left1 + k / 2 -1]
+		mid2 = nums2[left2 + k / 2 -1]
 	}
 	if mid1 <= mid2 {
-		return findK(nums1, left1 + k /2, nums2, left2, k - k / 2)
+		return findK(nums1, left1 + k / 2, nums2, left2, k - k / 2)
 	}
 	return findK(nums1, left1, nums2, left2 + k / 2, k - k / 2)
 }

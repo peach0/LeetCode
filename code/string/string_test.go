@@ -1,6 +1,9 @@
 package stringCode
 
-import "testing"
+import (
+	"net/http"
+	"testing"
+)
 
 func TestLongestSubstring(t *testing.T) {
 	str := ""
@@ -20,10 +23,19 @@ func lengthOfLongestSubstring(s string) int {
 	}
 	return  len
 }
+func TestStr(t *testing.T) {
+	str := "hahahah"
+	t.Log(str[1:])
+
+}
 
 func Max(x, y int) int {
 	if x > y {
 		return x
 	}
 	return y
+}
+
+//5. 最长回文子串
+func longestPalindrome(s string) string {
 }
