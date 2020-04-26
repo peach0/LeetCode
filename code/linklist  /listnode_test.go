@@ -1,6 +1,8 @@
 package linklist
 
-import "testing"
+import (
+	"testing"
+)
 
 //Definition for singly-linked list.
 type ListNode struct {
@@ -48,4 +50,35 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 		}
 	}
 	return l3.Next
+}
+
+//23. 合并K个排序链表
+func mergeKLists(lists []*ListNode) *ListNode {
+	list :=  getMergeList(lists, 0 , len(lists) -1)
+	return list
+}
+func getMergeList(lists[] *ListNode, start int, end int) *ListNode {
+	if start == end {
+		return lists[start]
+	}
+	if end - start == 1 {
+		return compare(lists[start], lists[end])
+	}
+	return compare(getMergeList(lists, start, (start + end) / 2), getMergeList(lists,(start + end) / 2 , end))
+}
+
+func compare(node1 *ListNode, node2 *ListNode) *ListNode {
+	l := node1
+	for l != nil || node2 != nil  {
+		if l.Val < node2.Val{
+			l = l.Next
+		} else {
+			p := l.Next
+			l .Next = node2
+			node2 = node2.Next
+			l.Next.Next = p
+			l = l.Next.Next
+		}
+	}
+	return node1;
 }
