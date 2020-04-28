@@ -52,8 +52,24 @@ func addTwoNumbers(l1 *ListNode, l2 *ListNode) *ListNode {
 	return l3.Next
 }
 
+func TestMergeList(t *testing.T) {
+	var lists []*ListNode
+	lists = append(lists,&ListNode{1, nil})
+	lists[0].Next = &ListNode{4, nil}
+	lists[0].Next.Next = &ListNode{5, nil}
+	lists = append(lists,&ListNode{1, nil})
+	lists[1].Next = &ListNode{3, nil}
+	lists[1].Next.Next = &ListNode{4, nil}
+	lists = append(lists,&ListNode{2, nil})
+	lists[2].Next = &ListNode{6, nil}
+	t.Log(mergeKLists(lists))
+}
+
 //23. 合并K个排序链表
 func mergeKLists(lists []*ListNode) *ListNode {
+	if lists == nil {
+		return nil
+	}
 	list :=  getMergeList(lists, 0 , len(lists) -1)
 	return list
 }
@@ -64,21 +80,49 @@ func getMergeList(lists[] *ListNode, start int, end int) *ListNode {
 	if end - start == 1 {
 		return compare(lists[start], lists[end])
 	}
-	return compare(getMergeList(lists, start, (start + end) / 2), getMergeList(lists,(start + end) / 2 , end))
+	l1 :=getMergeList(lists, start, (start + end) / 2)
+	l2 :=getMergeList(lists,(start + end) / 2 + 1 , end)
+	//return compare(getMergeList(lists, start, (start + end) / 2), getMergeList(lists,(start + end) / 2 + 1 , end))
+	return compare(l1,l2)
 }
 
 func compare(node1 *ListNode, node2 *ListNode) *ListNode {
-	l := node1
-	for l != nil || node2 != nil  {
-		if l.Val < node2.Val{
-			l = l.Next
+	switch {
+	case node1 == nil && node2 == nil:
+		return node2
+	case node1 == nil:
+		return node2
+	case node2 == nil:
+		return node1
+	}
+	var p ,l2 *ListNode
+	if node1.Val <= node2.Val {
+		p = node1
+		l2 = node2
+	}else {
+		p = node2
+		l2 = node1
+	}
+
+	pre := p
+	l1 := p.Next
+	for l1 != nil || l2 != nil  {
+		if l1== nil {
+			pre.Next = l2
+			break
+		}
+		if l2 == nil {
+			break
+		}
+		if l1.Val < l2.Val{
+			pre = pre.Next
+			l1 = l1.Next
 		} else {
-			p := l.Next
-			l .Next = node2
-			node2 = node2.Next
-			l.Next.Next = p
-			l = l.Next.Next
+			pre.Next = l2
+			l2 = l2.Next
+			pre = pre.Next
+			pre.Next = l1
 		}
 	}
-	return node1;
+	return p
 }
